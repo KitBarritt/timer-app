@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Toastmaster Timer</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/colors.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <div id="main">
+    <div id="left-panel">
+      <a href="speakers.html" class="button button-default">Speaker List</a>
+
+      <select id="speakerDropdown">
+        <option value="">Select Speaker</option>
+      </select>
+      <button type="button" class="preset button button-default" data-times="60,90,120,150">Table Topics</button>
+      <button type="button" class="preset button button-default" data-times="120,150,180,210">Evaluations</button>
+      <button type="button" class="preset button button-default" data-times="240,300,360,390">Icebreaker</button>
+      <button type="button" class="preset button button-default" data-times="300,360,420,450">Speech</button>
+      <button type="button" class="preset button button-default" data-times="600,660,720,750">Long</button>
+      <button type="button" id="manualBtn" class="button button-default">Manual</button>
+      <button type="button" id="addTableTopicBtn" class="button button-default">Add Table Topic</button>
+      <button type="button" id="openDisplayBtn" class="button button-default">Open Display</button>
+    </div>
+    <div id="display">
+      <span id="colorLabel"></span>
+    </div>
+    <div id="bottom-panel">
+      <div id="buttons">
+        <div></div>
+        <div id="stopwatch_time"><div id="stopwatch" >00:00</div></div>
+        <div></div>
+        <div class="time-label" id="time-green">--:--</div>
+        <div class="time-label" id="time-amber">--:--</div>
+        <div class="time-label" id="time-red">--:--</div>
+        <div></div>
+
+        <button type="button" id="startBtn" class="button button-default">Start</button>
+        <button type="button" id="stopBtn" class="button button-default">Stop</button>
+        <button type="button" id="resetBtn" class="button button-default">Reset</button>
+        <button type="button" id="greenBtn" class="button button-green">Green</button>
+        <button type="button" id="amberBtn" class="button button-amber">Amber</button>
+        <button type="button" id="redBtn" class="button button-red">Red</button>
+        <button type="button" id="clearBtn" class="button button-default">Clear</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
