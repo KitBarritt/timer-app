@@ -193,7 +193,7 @@ document.getElementById('addTableTopicBtn')?.addEventListener('click', () => {
 
 // Open OBS display window
 document.getElementById('openDisplayBtn')?.addEventListener('click', () => {
-  window.open('display.html', 'obsTimerDisplay', 'width=1280,height=720,resizable=yes');
+  window.open('display.html', 'obsTimerDisplay', 'width=400,height=240,resizable=yes');
 });
 
 // Stopwatch controls
