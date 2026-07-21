@@ -4,17 +4,26 @@ let currentColorKey = 'grey';
 
 const TABLE_TOPICS_PRESET = [60, 90, 120, 150];
 
-const timerChannel = new BroadcastChannel('obs-timer-channel');
+const roomId = getOrCreateRoomId();
+
+const timerChannel = new BroadcastChannel('obs-timer-channel-' + roomId);
 timerChannel.onmessage = (e) => {
   if (e.data?.type === 'requestState') broadcastState();
 };
 
 function broadcastState() {
-  timerChannel.postMessage({
-    type: 'state',
-    color: currentColorKey,
-    running: !!stopwatchInterval
-  });
+  const payload = { room: roomId, color: currentColorKey, running: !!stopwatchInterval };
+
+  timerChannel.postMessage({ type: 'state', ...payload });
+
+  // Also push to the server so a display page running in a separate process
+  // (e.g. an OBS Browser Source) can pick it up via polling. Fails silently
+  // when there's no PHP backend around (e.g. testing over a plain static server).
+  fetch('state.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(() => {});
 }
 
 function updateDisplayColor(colorKey) {
@@ -191,9 +200,23 @@ document.getElementById('addTableTopicBtn')?.addEventListener('click', () => {
   applySpeakerPreset(name);
 });
 
-// Open OBS display window
+// Open OBS display window / share the display link
+const displayUrl = new URL('display.html', location.href);
+displayUrl.searchParams.set('room', roomId);
+
+const displayLinkInput = document.getElementById('displayLinkInput');
+if (displayLinkInput) displayLinkInput.value = displayUrl.href;
+
 document.getElementById('openDisplayBtn')?.addEventListener('click', () => {
-  window.open('display.html', 'obsTimerDisplay', 'width=400,height=240,resizable=yes');
+  window.open(displayUrl.href, 'obsTimerDisplay', 'width=400,height=240,resizable=yes');
+});
+
+document.getElementById('copyDisplayLinkBtn')?.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(displayUrl.href);
+  } catch {
+    displayLinkInput?.select();
+  }
 });
 
 // Stopwatch controls

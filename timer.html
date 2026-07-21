@@ -4,6 +4,7 @@
   <title>Toastmaster Timer</title>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/colors.js"></script>
+  <script src="js/room.js"></script>
   <script defer src="js/main.js"></script>
 </head>
 <body>
@@ -22,6 +23,10 @@
       <button type="button" id="manualBtn" class="button button-default">Manual</button>
       <button type="button" id="addTableTopicBtn" class="button button-default">Add Table Topic</button>
       <button type="button" id="openDisplayBtn" class="button button-default">Open Display</button>
+      <div id="displayLinkRow">
+        <input type="text" id="displayLinkInput" readonly aria-label="Display link">
+        <button type="button" id="copyDisplayLinkBtn" class="button button-default">Copy Display Link</button>
+      </div>
     </div>
     <div id="display">
       <span id="colorLabel"></span>
