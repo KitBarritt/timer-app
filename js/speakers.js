@@ -5,7 +5,8 @@ const presets = {
   'Icebreaker': [240, 300, 360, 390],
   'Speech': [300, 360, 420, 450],
   '10 Minutes': [480, 540, 600, 630],
-  '15 Minutes': [720, 840, 900, 930]
+  '15 Minutes': [720, 840, 900, 930],
+  '20 Minutes': [900, 1080, 1200, 1230]
 };
 
 function toMMSS(sec) {
