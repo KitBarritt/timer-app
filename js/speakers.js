@@ -1,9 +1,11 @@
 const presets = {
+  'One Minute': [60, 60, 60, 90],
   'Table Topics': [60, 90, 120, 150],
   'Evaluations': [120, 150, 180, 210],
   'Icebreaker': [240, 300, 360, 390],
   'Speech': [300, 360, 420, 450],
-  'Long': [600, 660, 720, 750]
+  '10 Minutes': [480, 540, 600, 630],
+  '15 Minutes': [720, 840, 900, 930]
 };
 
 function toMMSS(sec) {

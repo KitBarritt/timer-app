@@ -4,6 +4,19 @@ let currentColorKey = 'grey';
 
 const TABLE_TOPICS_PRESET = [60, 90, 120, 150];
 
+// Mini player mode persists across navigation (e.g. going to the Speaker
+// List and back), the same way the room ID does.
+const MINI_MODE_KEY = 'timerMiniMode';
+
+function setMiniMode(enabled) {
+  document.documentElement.classList.toggle('mini-mode', enabled);
+  localStorage.setItem(MINI_MODE_KEY, enabled ? '1' : '0');
+}
+
+if (localStorage.getItem(MINI_MODE_KEY) === '1') {
+  document.documentElement.classList.add('mini-mode');
+}
+
 const roomId = getOrCreateRoomId();
 
 const timerChannel = new BroadcastChannel('obs-timer-channel-' + roomId);
@@ -203,12 +216,9 @@ document.getElementById('addTableTopicBtn')?.addEventListener('click', () => {
   applySpeakerPreset(name);
 });
 
-// Open OBS display window / share the display link
+// Open OBS display window / copy the display link
 const displayUrl = new URL('display.html', location.href);
 displayUrl.searchParams.set('room', roomId);
-
-const displayLinkInput = document.getElementById('displayLinkInput');
-if (displayLinkInput) displayLinkInput.value = displayUrl.href;
 
 document.getElementById('openDisplayBtn')?.addEventListener('click', () => {
   window.open(displayUrl.href, 'obsTimerDisplay', 'width=1920,height=1080,resizable=yes');
@@ -218,8 +228,20 @@ document.getElementById('copyDisplayLinkBtn')?.addEventListener('click', async (
   try {
     await navigator.clipboard.writeText(displayUrl.href);
   } catch {
-    displayLinkInput?.select();
+    window.prompt('Copy this link:', displayUrl.href);
   }
+});
+
+// Mini player: compact layout toggle for the control window itself
+document.getElementById('miniPlayerBtn')?.addEventListener('click', () => setMiniMode(true));
+document.getElementById('fullViewBtn')?.addEventListener('click', () => setMiniMode(false));
+
+// Hide/unhide the stopwatch readout (the Configuration menu itself opens on
+// hover via CSS, so there's nothing to wire up for that beyond this action)
+const hideStopwatchBtn = document.getElementById('hideStopwatchToggle');
+hideStopwatchBtn?.addEventListener('click', () => {
+  const hidden = document.documentElement.classList.toggle('stopwatch-hidden');
+  hideStopwatchBtn.textContent = hidden ? 'Show Stopwatch' : 'Hide Stopwatch';
 });
 
 // Stopwatch controls

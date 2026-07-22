@@ -9,6 +9,23 @@
   <script defer src="js/main.js"></script>
 </head>
 <body>
+  <header id="appBanner">
+    Timer App by Kit
+    <div id="configMenu">
+      <button type="button" id="configMenuBtn" aria-label="Configuration menu" aria-haspopup="true">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <div id="configMenuPanel">
+        <button type="button" id="openDisplayBtn" class="menu-item">Open Display</button>
+        <button type="button" id="copyDisplayLinkBtn" class="menu-item">Copy Display Link</button>
+        <button type="button" id="miniPlayerBtn" class="menu-item">Mini Player</button>
+        <button type="button" id="fullViewBtn" class="menu-item">Full View</button>
+        <button type="button" id="hideStopwatchToggle" class="menu-item">Hide Stopwatch</button>
+      </div>
+    </div>
+  </header>
   <div id="main">
     <div id="left-panel">
       <a href="speakers.html" class="button button-default">Speaker List</a>
@@ -16,18 +33,15 @@
       <select id="speakerDropdown">
         <option value="">Select Speaker</option>
       </select>
+      <button type="button" id="addTableTopicBtn" class="button button-default">Add Table Topic</button>
+      <button type="button" class="preset button button-default" data-times="60,60,60,90">One Minute</button>
       <button type="button" class="preset button button-default" data-times="60,90,120,150">Table Topics</button>
       <button type="button" class="preset button button-default" data-times="120,150,180,210">Evaluations</button>
       <button type="button" class="preset button button-default" data-times="240,300,360,390">Icebreaker</button>
       <button type="button" class="preset button button-default" data-times="300,360,420,450">Speech</button>
-      <button type="button" class="preset button button-default" data-times="600,660,720,750">Long</button>
+      <button type="button" class="preset button button-default" data-times="480,540,600,630">10 Minutes</button>
+      <button type="button" class="preset button button-default" data-times="720,840,900,930">15 Minutes</button>
       <button type="button" id="manualBtn" class="button button-default">Manual</button>
-      <button type="button" id="addTableTopicBtn" class="button button-default">Add Table Topic</button>
-      <button type="button" id="openDisplayBtn" class="button button-default">Open Display</button>
-      <div id="displayLinkRow">
-        <input type="text" id="displayLinkInput" readonly aria-label="Display link">
-        <button type="button" id="copyDisplayLinkBtn" class="button button-default">Copy Display Link</button>
-      </div>
     </div>
     <div id="display">
       <span id="colorLabel"></span>

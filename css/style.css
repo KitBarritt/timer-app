@@ -5,10 +5,23 @@ body, html {
   font-family: Arial, sans-serif;
 }
 
+#appBanner {
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  margin: 0;
+  background: #333;
+  color: white;
+  text-align: center;
+  font-size: 1.3em;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
 #main {
   display: flex;
   flex-direction: row;
-  height: 100%;
+  height: calc(100% - 40px);
   width: 100%;
 }
 
@@ -53,20 +66,73 @@ body, html {
   display: block;
 }
 
-#displayLinkRow {
+#configMenu {
+  position: absolute;
+  top: 0;
+  right: 8px;
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  z-index: 100;
 }
 
-#displayLinkInput {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
+#configMenuBtn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 32px;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+#configMenuBtn .bar {
+  display: block;
+  width: 22px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+}
+
+#configMenuPanel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 200px;
+  background: white;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 0.85em;
-  background: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#configMenu:hover #configMenuPanel,
+#configMenu:focus-within #configMenuPanel {
+  display: flex;
+}
+
+#configMenuPanel .menu-item {
+  display: block;
+  width: 100%;
+  padding: 7px 14px;
+  border: none;
+  background: none;
+  color: #333;
+  font-family: inherit;
+  font-size: 0.475em;
+  text-align: left;
+  cursor: pointer;
+}
+
+#configMenuPanel .menu-item:hover,
+#configMenuPanel .menu-item:focus {
+  background: #f0f0f0;
 }
 
 #bottom-panel {
@@ -192,15 +258,7 @@ button:active,
 
 
 #stopwatch_time {
-  font-family: monospace;
-  font-size: 2.5em;
-  margin-bottom: 10px;
-  text-align: center;
-  
-}
-
-#stopwatch_time {
-  font-family: monospace;
+  font-family: 'Roboto', Arial, monospace;
   font-size: 2.5em;
   margin-bottom: 10px;
   text-align: center;
@@ -355,4 +413,123 @@ input, select {
 @keyframes spin {
   from { transform: translate(-50%, -100%) rotate(0deg); }
   to { transform: translate(-50%, -100%) rotate(360deg); }
+}
+
+/* Mini player: compact control-window layout */
+#configMenuPanel #fullViewBtn {
+  display: none;
+}
+
+.mini-mode #miniPlayerBtn {
+  display: none;
+}
+
+.mini-mode #configMenuPanel #fullViewBtn {
+  display: block;
+}
+
+.mini-mode #openDisplayBtn,
+.mini-mode #copyDisplayLinkBtn {
+  display: none;
+}
+
+.stopwatch-hidden #stopwatch_time {
+  visibility: hidden;
+}
+
+.mini-mode html,
+html.mini-mode,
+html.mini-mode body {
+  height: auto;
+  min-height: 100%;
+}
+
+.mini-mode #main {
+  flex-direction: column;
+  height: auto;
+  width: auto;
+}
+
+.mini-mode #left-panel {
+  width: auto;
+  min-width: 0;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.mini-mode #left-panel > a,
+.mini-mode #left-panel > select {
+  grid-column: span 1;
+}
+
+.mini-mode #left-panel button,
+.mini-mode #left-panel select,
+.mini-mode #left-panel .button {
+  padding: 6px 4px;
+  font-size: 0.7em;
+}
+
+.mini-mode #display {
+  flex-grow: 0;
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  border-radius: 50%;
+  margin: 10px auto 6px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.mini-mode #colorLabel {
+  display: none !important;
+}
+
+.mini-mode #bottom-panel {
+  position: static;
+  width: auto;
+  padding: 6px 0;
+}
+
+.mini-mode #buttons {
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: none;
+  grid-template-areas:
+    "sw    sw    sw    sw    sw    sw    sw    sw"
+    "start start stop  stop  reset reset clear clear"
+    ".     tg    tg    ta    ta    tr    tr    ."
+    ".     green green amber amber red   red   .";
+  gap: 4px;
+  width: 95%;
+  font-size: 0.7em;
+}
+
+.mini-mode #buttons > div:empty {
+  display: none;
+}
+
+.mini-mode #stopwatch_time { grid-area: sw; }
+.mini-mode #time-green { grid-area: tg; }
+.mini-mode #time-amber { grid-area: ta; }
+.mini-mode #time-red { grid-area: tr; }
+.mini-mode #startBtn { grid-area: start; }
+.mini-mode #stopBtn { grid-area: stop; }
+.mini-mode #resetBtn { grid-area: reset; }
+.mini-mode #clearBtn { grid-area: clear; }
+.mini-mode #greenBtn { grid-area: green; }
+.mini-mode #amberBtn { grid-area: amber; }
+.mini-mode #redBtn { grid-area: red; }
+
+.mini-mode #buttons button {
+  font-size: 1em;
+  padding: 4px 6px;
+}
+
+.mini-mode .time-label {
+  font-size: 1em;
+}
+
+.mini-mode #stopwatch_time {
+  font-size: 1.7em;
+  margin-bottom: 4px;
 }
