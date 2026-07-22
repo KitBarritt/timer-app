@@ -310,18 +310,18 @@ input, select {
 }
 
 #displayColorLabel {
-  font-size: 1.4em;
+  font-size: 5.6em;
   font-weight: bold;
   display: none;
 }
 
 #displayBottomLabel {
   position: absolute;
-  bottom: 14px;
+  bottom: 56px;
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 1em;
+  font-size: 4em;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   opacity: 0.85;
@@ -329,12 +329,12 @@ input, select {
 
 #runningIndicator {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 22px;
-  height: 22px;
+  top: 40px;
+  right: 40px;
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
-  border: 2px solid white;
+  border: 8px solid white;
   box-sizing: border-box;
 }
 
@@ -342,8 +342,8 @@ input, select {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 2px;
-  height: 8px;
+  width: 8px;
+  height: 32px;
   background: white;
   transform-origin: bottom center;
   transform: translate(-50%, -100%) rotate(0deg);

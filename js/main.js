@@ -211,7 +211,7 @@ const displayLinkInput = document.getElementById('displayLinkInput');
 if (displayLinkInput) displayLinkInput.value = displayUrl.href;
 
 document.getElementById('openDisplayBtn')?.addEventListener('click', () => {
-  window.open(displayUrl.href, 'obsTimerDisplay', 'width=426,height=240,resizable=yes');
+  window.open(displayUrl.href, 'obsTimerDisplay', 'width=1920,height=1080,resizable=yes');
 });
 
 document.getElementById('copyDisplayLinkBtn')?.addEventListener('click', async () => {
