@@ -1,0 +1,544 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+#appBanner {
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  margin: 0;
+  background: #333;
+  color: white;
+  text-align: center;
+  font-size: 1.3em;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+#main {
+  display: flex;
+  flex-direction: row;
+  height: calc(100% - 40px);
+  width: 100%;
+}
+
+#display {
+  flex-grow: 1;
+  background-color: grey;
+  transition: background-color 1s ease;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3em;
+  color: white;
+}
+
+#colorLabel {
+  position: absolute;
+  display: none;
+}
+
+#left-panel {
+  width: 10%;
+  min-width: 250px;
+  padding: 10px;
+  background: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+}
+
+#left-panel button, #left-panel select, #left-panel .button {
+  padding: 10px;
+  font-size: 1em;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+  border: none;
+  background-color: #ccc;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+}
+
+#left-panel #speakerDropdown {
+  width: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(to bottom, #f0f0f0, #ccc);
+  color: #333;
+  font-weight: bold;
+}
+
+#configMenu {
+  position: absolute;
+  top: 0;
+  right: 8px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  z-index: 100;
+}
+
+#configMenuBtn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 32px;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+#configMenuBtn .bar {
+  display: block;
+  width: 22px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+}
+
+#configMenuPanel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 200px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#configMenu:hover #configMenuPanel,
+#configMenu:focus-within #configMenuPanel {
+  display: flex;
+}
+
+#configMenuPanel .menu-item {
+  display: block;
+  width: 100%;
+  padding: 7px 14px;
+  border: none;
+  background: none;
+  color: #333;
+  font-family: inherit;
+  font-size: 0.475em;
+  text-align: left;
+  cursor: pointer;
+}
+
+#configMenuPanel .menu-item:hover,
+#configMenuPanel .menu-item:focus {
+  background: #f0f0f0;
+}
+
+#bottom-panel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #ddd;
+  padding: 10px 0 10px 0;
+  display: flex;
+  justify-content: center;
+}
+
+#buttons {
+  font-size: 1em;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  width: 95%;
+  align-items: center;
+}
+
+.time-label {
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Base button appearance */
+button,
+.button {
+  font-size: 24px;
+  padding: 0.6em 1.2em;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+/* Hover animation */
+button:hover,
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Press effect (reversed gradient + pushed down) */
+button:active,
+.button:active {
+  transform: translateY(0px);
+  box-shadow: 0 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Gradient variants */
+
+/* Grey default */
+.button-default {
+  background: linear-gradient(to bottom, #f0f0f0, #ccc);
+  color: #333;
+}
+.button-default:active {
+  background: linear-gradient(to top, #f0f0f0, #ccc);
+}
+
+.preset {
+  background: linear-gradient(to bottom, #f0f0f0, #ccc);
+  color: #333;
+}
+.preset:active {
+  background: linear-gradient(to top, #f0f0f0, #ccc);
+}
+
+/* Green */
+.button-green {
+  background: linear-gradient(to bottom, #a8e6a3, #4caf50);
+  color: white;
+}
+.button-green:active {
+  background: linear-gradient(to top, #a8e6a3, #4caf50);
+}
+
+/* Amber */
+.button-amber {
+  background: linear-gradient(to bottom, #ffe082, #ffa000);
+  color: black;
+}
+.button-amber:active {
+  background: linear-gradient(to top, #ffe082, #ffa000);
+}
+
+/* Red */
+.button-red {
+  background: linear-gradient(to bottom, #ef9a9a, #d32f2f);
+  color: white;
+}
+.button-red:active {
+  background: linear-gradient(to top, #ef9a9a, #d32f2f);
+}
+
+/* Clear */
+.button-clear {
+  background: linear-gradient(to bottom, #f0f0f0, #ccc);
+  color: #333;
+}
+.preset:active {
+  background: linear-gradient(to top, #f0f0f0, #ccc);
+}
+
+/* Blue / Splash screen */
+.button-primary {
+  background: linear-gradient(to bottom, #90caf9, #1976d2);
+  color: white;
+}
+.button-primary:active {
+  background: linear-gradient(to top, #90caf9, #1976d2);
+}
+
+
+#stopwatch_time {
+  font-family: 'Roboto', Arial, monospace;
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  text-align: center;
+  background: none !important;
+}
+
+
+
+/* 3D Button Styles */
+button,
+.button {
+  padding: 0.6em 1.2em;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+button:hover,
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px rgba(0, 0, 0, 0.3);
+}
+
+button:active,
+.button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Button Variants */
+.button-default {
+  background: linear-gradient(to bottom, #f0f0f0, #ccc);
+  color: #333;
+}
+
+.button-green {
+  background: linear-gradient(to bottom, #a8e6a3, #4caf50);
+  color: white;
+}
+
+.button-amber {
+  background: linear-gradient(to bottom, #ffe082, #ffa000);
+  color: black;
+}
+
+.button-red {
+  background: linear-gradient(to bottom, #ef9a9a, #d32f2f);
+  color: white;
+}
+
+.button-primary {
+  background: linear-gradient(to bottom, #90caf9, #1976d2);
+  color: white;
+}
+
+/* Speaker List Styles */
+.page {
+  padding: 10px;
+  font-family: Arial, sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+}
+th, td {
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+
+/* Input fields inside table */
+input, select {
+  width: 90%;
+  padding: 0.3em;
+  box-sizing: border-box;
+}
+
+#save-btn {
+  font-size: 16px;
+  margin-top: 1em;
+}
+
+/* OBS Display window */
+.display-body {
+  overflow: hidden;
+}
+
+#displayScreen {
+  width: 100vw;
+  height: 100vh;
+  background-color: grey;
+  transition: background-color 1s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+#displayColorLabel {
+  font-size: 5.6em;
+  font-weight: bold;
+  display: none;
+}
+
+#displayBottomLabel {
+  position: absolute;
+  bottom: 56px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 4em;
+  letter-spacing: 0.15em;
+  opacity: 0.85;
+}
+
+#runningIndicator {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 8px solid white;
+  box-sizing: border-box;
+}
+
+#runningHand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 32px;
+  background: white;
+  transform-origin: bottom center;
+  transform: translate(-50%, -100%) rotate(0deg);
+}
+
+#runningIndicator.running #runningHand {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: translate(-50%, -100%) rotate(0deg); }
+  to { transform: translate(-50%, -100%) rotate(360deg); }
+}
+
+/* Mini player: compact control-window layout */
+#configMenuPanel #fullViewBtn {
+  display: none;
+}
+
+.mini-mode #miniPlayerBtn {
+  display: none;
+}
+
+.mini-mode #configMenuPanel #fullViewBtn {
+  display: block;
+}
+
+.mini-mode #openDisplayBtn,
+.mini-mode #copyDisplayLinkBtn {
+  display: none;
+}
+
+.stopwatch-hidden #stopwatch_time {
+  visibility: hidden;
+}
+
+.mini-mode html,
+html.mini-mode,
+html.mini-mode body {
+  height: auto;
+  min-height: 100%;
+}
+
+.mini-mode #main {
+  flex-direction: column;
+  height: auto;
+  width: auto;
+}
+
+.mini-mode #left-panel {
+  width: auto;
+  min-width: 0;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.mini-mode #left-panel > a,
+.mini-mode #left-panel > select {
+  grid-column: span 1;
+}
+
+.mini-mode #left-panel button,
+.mini-mode #left-panel select,
+.mini-mode #left-panel .button {
+  padding: 6px 4px;
+  font-size: 0.7em;
+}
+
+.mini-mode #display {
+  flex-grow: 0;
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  border-radius: 50%;
+  margin: 10px auto 6px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.mini-mode #colorLabel {
+  display: none !important;
+}
+
+.mini-mode #bottom-panel {
+  position: static;
+  width: auto;
+  padding: 6px 0;
+}
+
+.mini-mode #buttons {
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: none;
+  grid-template-areas:
+    "sw    sw    sw    sw   sw    sw    sw    sw"
+    ".     start start stop stop  reset reset ."
+    "tg    tg    ta    ta   tr    tr    .     ."
+    "green green amber amber red  red   clear clear";
+  gap: 4px;
+  width: 95%;
+  font-size: 0.7em;
+}
+
+.mini-mode #buttons > div:empty {
+  display: none;
+}
+
+.mini-mode #stopwatch_time { grid-area: sw; }
+.mini-mode #time-green { grid-area: tg; }
+.mini-mode #time-amber { grid-area: ta; }
+.mini-mode #time-red { grid-area: tr; }
+.mini-mode #startBtn { grid-area: start; }
+.mini-mode #stopBtn { grid-area: stop; }
+.mini-mode #resetBtn { grid-area: reset; }
+.mini-mode #clearBtn { grid-area: clear; }
+.mini-mode #greenBtn { grid-area: green; }
+.mini-mode #amberBtn { grid-area: amber; }
+.mini-mode #redBtn { grid-area: red; }
+
+.mini-mode #buttons button {
+  font-size: 1em;
+  padding: 4px 6px;
+}
+
+.mini-mode .time-label {
+  font-size: 1em;
+}
+
+.mini-mode #stopwatch_time {
+  font-size: 1.7em;
+  margin-bottom: 4px;
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speaker List</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1em;
+    }
+    th, td {
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+  </style>
+  <script defer src="js/speakers.js"></script>
+</head>
+<body>
+  <h1>Speaker List</h1>
+  <form id="speaker-form">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Preset</th>
+          <th>Green (mm:ss)</th>
+          <th>Amber (mm:ss)</th>
+          <th>Red (mm:ss)</th>
+          <th>Flash (mm:ss)</th>
+          <th>Actual (mm:ss)</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <!-- Rows will be injected here -->
+      </tbody>
+    </table>
+    <button type="submit" class="button button-default" id="save-btn">💾 Save & Return to Timer</button>
+  </form>
+</body>
+</html>

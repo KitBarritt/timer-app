@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Toastmaster Timer</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <script src="js/colors.js"></script>
+  <script src="js/room.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <header id="appBanner">
+    Timer App by Kit
+    <div id="configMenu">
+      <button type="button" id="configMenuBtn" aria-label="Configuration menu" aria-haspopup="true">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <div id="configMenuPanel">
+        <button type="button" id="openDisplayBtn" class="menu-item">Open Display</button>
+        <button type="button" id="copyDisplayLinkBtn" class="menu-item">Copy Display Link</button>
+        <button type="button" id="miniPlayerBtn" class="menu-item">Mini Player</button>
+        <button type="button" id="fullViewBtn" class="menu-item">Full View</button>
+        <button type="button" id="hideStopwatchToggle" class="menu-item">Hide Stopwatch</button>
+      </div>
+    </div>
+  </header>
+  <div id="main">
+    <div id="left-panel">
+      <a href="speakers.html" class="button button-default">Speaker List</a>
+
+      <select id="speakerDropdown">
+        <option value="">Select Speaker</option>
+      </select>
+      <button type="button" id="addTableTopicBtn" class="button button-default">Add Table Topic</button>
+      <button type="button" class="preset button button-default" data-times="60,60,60,90">One Minute</button>
+      <button type="button" class="preset button button-default" data-times="60,90,120,150">Table Topics</button>
+      <button type="button" class="preset button button-default" data-times="120,150,180,210">Evaluations</button>
+      <button type="button" class="preset button button-default" data-times="240,300,360,390">Icebreaker</button>
+      <button type="button" class="preset button button-default" data-times="300,360,420,450">Speech</button>
+      <button type="button" class="preset button button-default" data-times="480,540,600,630">10 Minutes</button>
+      <button type="button" class="preset button button-default" data-times="720,840,900,930">15 Minutes</button>
+      <button type="button" class="preset button button-default" data-times="900,1080,1200,1230">20 Minutes</button>
+      <button type="button" id="manualBtn" class="button button-default">Manual</button>
+    </div>
+    <div id="display">
+      <span id="colorLabel"></span>
+    </div>
+    <div id="bottom-panel">
+      <div id="buttons">
+        <div></div>
+        <div id="stopwatch_time"><div id="stopwatch" >00:00</div></div>
+        <div></div>
+        <div class="time-label" id="time-green">--:--</div>
+        <div class="time-label" id="time-amber">--:--</div>
+        <div class="time-label" id="time-red">--:--</div>
+        <div></div>
+
+        <button type="button" id="startBtn" class="button button-default">Start</button>
+        <button type="button" id="stopBtn" class="button button-default">Stop</button>
+        <button type="button" id="resetBtn" class="button button-default">Reset</button>
+        <button type="button" id="greenBtn" class="button button-green">Green</button>
+        <button type="button" id="amberBtn" class="button button-amber">Amber</button>
+        <button type="button" id="redBtn" class="button button-red">Red</button>
+        <button type="button" id="clearBtn" class="button button-default">Clear</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
