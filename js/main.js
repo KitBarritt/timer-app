@@ -17,13 +17,16 @@ function broadcastState() {
   timerChannel.postMessage({ type: 'state', ...payload });
 
   // Also push to the server so a display page running in a separate process
-  // (e.g. an OBS Browser Source) can pick it up via polling. Fails silently
-  // when there's no PHP backend around (e.g. testing over a plain static server).
+  // (e.g. an OBS Browser Source) can pick it up via polling. Degrades to
+  // BroadcastChannel-only (with a console warning) when there's no PHP
+  // backend around, e.g. testing over a plain static server.
   fetch('state.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
-  }).catch(() => {});
+  }).then(res => {
+    if (!res.ok) res.text().then(t => console.warn('state.php POST failed:', res.status, t));
+  }).catch(err => console.warn('state.php unreachable:', err));
 }
 
 function updateDisplayColor(colorKey) {
@@ -208,7 +211,7 @@ const displayLinkInput = document.getElementById('displayLinkInput');
 if (displayLinkInput) displayLinkInput.value = displayUrl.href;
 
 document.getElementById('openDisplayBtn')?.addEventListener('click', () => {
-  window.open(displayUrl.href, 'obsTimerDisplay', 'width=400,height=240,resizable=yes');
+  window.open(displayUrl.href, 'obsTimerDisplay', 'width=426,height=240,resizable=yes');
 });
 
 document.getElementById('copyDisplayLinkBtn')?.addEventListener('click', async () => {

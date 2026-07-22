@@ -30,15 +30,23 @@ timerChannel.postMessage({ type: 'requestState' });
 // Cross-process fallback (e.g. an OBS Browser Source, which can't see
 // BroadcastChannel messages from the control page's real browser tab).
 // Silently does nothing if there's no PHP backend to poll.
+let pollWarned = false;
+
 async function pollState() {
   try {
     const res = await fetch(`state.php?room=${encodeURIComponent(roomId)}`, { cache: 'no-store' });
     if (res.ok) {
       const data = await res.json();
       applyState(data.color, data.running);
+    } else if (!pollWarned) {
+      pollWarned = true;
+      console.warn('state.php GET failed:', res.status, await res.text());
     }
-  } catch {
-    // no server-side state available — rely on BroadcastChannel only
+  } catch (err) {
+    if (!pollWarned) {
+      pollWarned = true;
+      console.warn('state.php unreachable, relying on BroadcastChannel only:', err);
+    }
   }
 }
 
