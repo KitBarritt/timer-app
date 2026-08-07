@@ -44,25 +44,29 @@ body {
   color: #333;
 }
 
-#customTimeRow {
+#timeFieldsRow {
   display: flex;
-  gap: 0.5em;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.7em;
+  margin-top: -0.2em;
 }
 
-#customTimeRow label {
-  flex: 1;
+.time-field {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  font-size: 1.1em;
+  font-size: 1.3em;
   font-weight: bold;
-  gap: 0.2em;
+  color: #333;
+  gap: 0.25em;
 }
 
-#customTimeRow input {
+.time-field input[type="text"] {
   align-self: flex-start;
-  width: 3.4em;
+  width: 7.5rem;
   font-size: 1.3em;
+  font-weight: bold;
   padding: 0.4em;
   box-sizing: border-box;
   border-radius: 6px;
@@ -70,25 +74,30 @@ body {
   text-align: center;
 }
 
-#thresholdSummary {
-  font-size: 1.1em;
-  text-align: center;
-  color: #444;
-  min-height: 1.3em;
+#customGreen {
+  background: green;
+  color: white;
 }
 
-#showStopwatchRow {
-  display: flex;
-  align-items: center;
-  gap: 0.6em;
-  font-size: 1.2em;
-  padding: 0.2em 0;
-  margin-top: -0.4em;
+#customAmber {
+  background: orange;
+  color: black;
 }
 
-#showStopwatchRow input {
-  width: 1.4em;
-  height: 1.4em;
+#customRed {
+  background: red;
+  color: white;
+}
+
+.time-field input[type="text"]:read-only {
+  opacity: 0.85;
+  cursor: default;
+}
+
+#hideStopwatchField input[type="checkbox"] {
+  align-self: flex-start;
+  width: 1.6em;
+  height: 1.6em;
 }
 
 #mobileDisplay {

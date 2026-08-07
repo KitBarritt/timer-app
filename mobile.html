@@ -10,7 +10,7 @@
   <script defer src="js/mobile.js"></script>
 </head>
 <body>
-  <header id="mobileBanner">Speech Timer</header>
+  <header id="mobileBanner">Speech Timer by Kit</header>
 
   <div id="mobileControls">
     <select id="presetSelect">
@@ -26,18 +26,20 @@
       <option value="custom">Custom&hellip;</option>
     </select>
 
-    <div id="customTimeRow" hidden>
-      <label>Green <input type="text" id="customGreen" inputmode="numeric" placeholder="mm:ss"></label>
-      <label>Amber <input type="text" id="customAmber" inputmode="numeric" placeholder="mm:ss"></label>
-      <label>Red <input type="text" id="customRed" inputmode="numeric" placeholder="mm:ss"></label>
+    <div id="timeFieldsRow">
+      <label class="time-field" id="greenField">Green
+        <input type="text" id="customGreen" inputmode="numeric" placeholder="mm:ss" readonly>
+      </label>
+      <label class="time-field" id="amberField">Amber
+        <input type="text" id="customAmber" inputmode="numeric" placeholder="mm:ss" readonly>
+      </label>
+      <label class="time-field" id="redField">Red
+        <input type="text" id="customRed" inputmode="numeric" placeholder="mm:ss" readonly>
+      </label>
+      <label class="time-field" id="hideStopwatchField">Hide Stopwatch
+        <input type="checkbox" id="hideStopwatchCheckbox" checked>
+      </label>
     </div>
-
-    <div id="thresholdSummary">&nbsp;</div>
-
-    <label id="showStopwatchRow">
-      <input type="checkbox" id="showStopwatchCheckbox">
-      Show stopwatch while running
-    </label>
   </div>
 
   <div id="mobileDisplay">

@@ -7,13 +7,11 @@ const colorLabel = document.getElementById('mobileColorLabel');
 const stopwatchEl = document.getElementById('mobileStopwatch');
 const runningIndicator = document.getElementById('mobileRunningIndicator');
 const presetSelect = document.getElementById('presetSelect');
-const customTimeRow = document.getElementById('customTimeRow');
 const customGreen = document.getElementById('customGreen');
 const customAmber = document.getElementById('customAmber');
 const customRed = document.getElementById('customRed');
-const thresholdSummary = document.getElementById('thresholdSummary');
-const showStopwatchRow = document.getElementById('showStopwatchRow');
-const showStopwatchCheckbox = document.getElementById('showStopwatchCheckbox');
+const hideStopwatchField = document.getElementById('hideStopwatchField');
+const hideStopwatchCheckbox = document.getElementById('hideStopwatchCheckbox');
 
 function updateDisplayColor(colorKey) {
   const color = COLOR_MAP[colorKey];
@@ -38,17 +36,8 @@ function parseMMSS(str) {
   return parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
 }
 
-function updateThresholdSummary() {
-  if (timingThresholds.length === 4) {
-    const [g, a, r] = timingThresholds;
-    thresholdSummary.textContent = `Green ${formatMMSS(g)} · Amber ${formatMMSS(a)} · Red ${formatMMSS(r)}`;
-  } else {
-    thresholdSummary.innerHTML = '&nbsp;';
-  }
-}
-
 function updateStopwatchVisibility() {
-  const showDigits = !running || showStopwatchCheckbox.checked;
+  const showDigits = !running || !hideStopwatchCheckbox.checked;
   stopwatchEl.style.display = showDigits ? 'block' : 'none';
   runningIndicator.style.display = (!showDigits && running) ? 'flex' : 'none';
 }
@@ -75,7 +64,7 @@ function updateColorFromTime() {
 function startStopwatch() {
   if (stopwatchInterval) return;
   running = true;
-  showStopwatchRow.style.display = 'none';
+  hideStopwatchField.style.display = 'none';
   updateStopwatchVisibility();
   startTime = Date.now() - elapsed;
   stopwatchInterval = setInterval(() => {
@@ -93,7 +82,7 @@ function stopStopwatch() {
   running = false;
   updateTime();
   updateDisplayColor('grey');
-  showStopwatchRow.style.display = '';
+  hideStopwatchField.style.display = '';
   updateStopwatchVisibility();
 }
 
@@ -106,26 +95,32 @@ function resetStopwatch() {
 
 // --- Preset / custom time selection ---
 
+function setFieldsReadonly(readonly) {
+  [customGreen, customAmber, customRed].forEach(input => { input.readOnly = readonly; });
+}
+
+function fillFieldsFromThresholds(thresholds) {
+  customGreen.value = thresholds.length === 4 ? formatMMSS(thresholds[0]) : '';
+  customAmber.value = thresholds.length === 4 ? formatMMSS(thresholds[1]) : '';
+  customRed.value = thresholds.length === 4 ? formatMMSS(thresholds[2]) : '';
+}
+
 presetSelect.addEventListener('change', () => {
   const option = presetSelect.selectedOptions[0];
 
   if (presetSelect.value === 'custom') {
-    customTimeRow.hidden = false;
+    setFieldsReadonly(false);
     timingThresholds = [];
-    updateThresholdSummary();
+    fillFieldsFromThresholds([]);
+    customGreen.focus();
     return;
   }
 
-  customTimeRow.hidden = true;
+  setFieldsReadonly(true);
 
   const times = option?.dataset.times;
-  if (times) {
-    timingThresholds = times.split(',').map(t => parseInt(t, 10));
-    updateThresholdSummary();
-  } else {
-    timingThresholds = [];
-    updateThresholdSummary();
-  }
+  timingThresholds = times ? times.split(',').map(t => parseInt(t, 10)) : [];
+  fillFieldsFromThresholds(timingThresholds);
 });
 
 function applyCustomTimes() {
@@ -137,7 +132,6 @@ function applyCustomTimes() {
   if (!(green <= amber && amber <= red)) return;
 
   timingThresholds = [green, amber, red, red + 30];
-  updateThresholdSummary();
 }
 
 [customGreen, customAmber, customRed].forEach(input => {
@@ -146,7 +140,7 @@ function applyCustomTimes() {
 
 // --- Stopwatch visibility preference ---
 
-showStopwatchCheckbox.addEventListener('change', updateStopwatchVisibility);
+hideStopwatchCheckbox.addEventListener('change', updateStopwatchVisibility);
 
 // --- Controls ---
 
