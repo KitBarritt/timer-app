@@ -1,0 +1,148 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+#mobileBanner {
+  flex: 0 0 auto;
+  padding: 0.8em 0;
+  background: #333;
+  color: white;
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+#mobileControls {
+  flex: 0 0 auto;
+  padding: 0.8em 1em;
+  background: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+
+#presetSelect {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6em;
+  font-size: 1.4em;
+  font-weight: bold;
+  font-family: inherit;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(to bottom, #f8f8f8, #ccc);
+  color: #333;
+}
+
+#customTimeRow {
+  display: flex;
+  gap: 0.5em;
+}
+
+#customTimeRow label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.1em;
+  font-weight: bold;
+  gap: 0.2em;
+}
+
+#customTimeRow input {
+  font-size: 1.3em;
+  padding: 0.4em;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+#thresholdSummary {
+  font-size: 1.1em;
+  text-align: center;
+  color: #444;
+  min-height: 1.3em;
+}
+
+#showStopwatchRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: 1.2em;
+  padding: 0.2em 0;
+}
+
+#showStopwatchRow input {
+  width: 1.4em;
+  height: 1.4em;
+}
+
+#mobileDisplay {
+  flex: 1 1 auto;
+  background-color: grey;
+  transition: background-color 1s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  color: white;
+}
+
+#mobileColorLabel {
+  font-size: 3em;
+  font-weight: bold;
+  display: none;
+}
+
+#mobileStopwatch {
+  font-family: 'Roboto', Arial, monospace;
+  font-size: 3em;
+  font-weight: bold;
+}
+
+#mobileButtons {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6em;
+  padding: 0.8em 1em calc(0.8em + env(safe-area-inset-bottom));
+  background: #ddd;
+}
+
+#mobileButtons button {
+  padding: 0.9em 0;
+  font-size: 1.4em;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  background: linear-gradient(to bottom, #f0f0f0, #ccc);
+  color: #333;
+}
+
+#mobileButtons button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px rgba(0, 0, 0, 0.2);
+}
+
+#mobileStartBtn {
+  background: linear-gradient(to bottom, #a8e6a3, #4caf50);
+  color: white;
+}
+
+#mobileStopBtn {
+  background: linear-gradient(to bottom, #ef9a9a, #d32f2f);
+  color: white;
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Speech Timer</title>
+  <link rel="stylesheet" href="css/mobile.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <script src="js/colors.js"></script>
+  <script defer src="js/mobile.js"></script>
+</head>
+<body>
+  <header id="mobileBanner">Speech Timer</header>
+
+  <div id="mobileControls">
+    <select id="presetSelect">
+      <option value="">Select a time&hellip;</option>
+      <option data-times="60,60,60,90">One Minute</option>
+      <option data-times="60,90,120,150">Table Topics</option>
+      <option data-times="120,150,180,210">Evaluations</option>
+      <option data-times="240,300,360,390">Icebreaker</option>
+      <option data-times="300,360,420,450">Speech</option>
+      <option data-times="480,540,600,630">10 Minutes</option>
+      <option data-times="720,840,900,930">15 Minutes</option>
+      <option data-times="900,1080,1200,1230">20 Minutes</option>
+      <option value="custom">Custom&hellip;</option>
+    </select>
+
+    <div id="customTimeRow" hidden>
+      <label>Green <input type="text" id="customGreen" inputmode="numeric" placeholder="mm:ss"></label>
+      <label>Amber <input type="text" id="customAmber" inputmode="numeric" placeholder="mm:ss"></label>
+      <label>Red <input type="text" id="customRed" inputmode="numeric" placeholder="mm:ss"></label>
+    </div>
+
+    <div id="thresholdSummary">&nbsp;</div>
+
+    <label id="showStopwatchRow">
+      <input type="checkbox" id="showStopwatchCheckbox">
+      Show stopwatch while running
+    </label>
+  </div>
+
+  <div id="mobileDisplay">
+    <span id="mobileColorLabel"></span>
+    <div id="mobileStopwatch">00:00</div>
+  </div>
+
+  <div id="mobileButtons">
+    <button type="button" id="mobileStartBtn">Start</button>
+    <button type="button" id="mobileStopBtn">Stop</button>
+    <button type="button" id="mobileResetBtn">Reset</button>
+  </div>
+</body>
+</html>
