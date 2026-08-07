@@ -38,6 +38,17 @@
     a.button:hover {
       background-color: #45a049;
     }
+    a.button-secondary {
+      display: block;
+      background-color: #ccc;
+      color: #333;
+      font-size: 1em;
+      padding: 0.8em 1.6em;
+      margin: 1em auto 0;
+    }
+    a.button-secondary:hover {
+      background-color: #bbb;
+    }
   </style>
   <script defer src="js/splash.js"></script>
 </head>
@@ -50,5 +61,6 @@
     Click below to begin.
   </p>
   <a class="button" id="continueBtn" href="timer.html">Continue</a>
+  <a class="button button-secondary" id="tabletModeBtn" href="mobile.html" hidden>Go to Tablet Mode</a>
 </body>
 </html>
