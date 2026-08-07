@@ -135,6 +135,7 @@ body, html {
   color: #333;
   font-family: inherit;
   font-size: 0.475em;
+  line-height: normal;
   text-align: left;
   text-decoration: none;
   box-sizing: border-box;
