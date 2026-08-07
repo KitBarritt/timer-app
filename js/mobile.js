@@ -5,6 +5,7 @@ let running = false;
 const display = document.getElementById('mobileDisplay');
 const colorLabel = document.getElementById('mobileColorLabel');
 const stopwatchEl = document.getElementById('mobileStopwatch');
+const runningIndicator = document.getElementById('mobileRunningIndicator');
 const presetSelect = document.getElementById('presetSelect');
 const customTimeRow = document.getElementById('customTimeRow');
 const customGreen = document.getElementById('customGreen');
@@ -47,8 +48,9 @@ function updateThresholdSummary() {
 }
 
 function updateStopwatchVisibility() {
-  const visible = !running || showStopwatchCheckbox.checked;
-  stopwatchEl.style.display = visible ? 'block' : 'none';
+  const showDigits = !running || showStopwatchCheckbox.checked;
+  stopwatchEl.style.display = showDigits ? 'block' : 'none';
+  runningIndicator.style.display = (!showDigits && running) ? 'flex' : 'none';
 }
 
 function updateTime() {
