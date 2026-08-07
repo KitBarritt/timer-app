@@ -244,6 +244,36 @@ hideStopwatchBtn?.addEventListener('click', () => {
   hideStopwatchBtn.textContent = hidden ? 'Show Stopwatch' : 'Hide Stopwatch';
 });
 
+// Tooltips: shown via the native title attribute (so they need no styling
+// of their own), toggle-able and remembered per browser like mini-player mode.
+const TOOLTIPS_KEY = 'timerTooltipsEnabled';
+const tooltipsToggleBtn = document.getElementById('tooltipsToggle');
+
+function tooltipsEnabled() {
+  return localStorage.getItem(TOOLTIPS_KEY) !== '0';
+}
+
+function applyTooltips(enabled) {
+  document.querySelectorAll('[data-tooltip]').forEach(el => {
+    if (enabled) {
+      el.title = el.dataset.tooltip;
+    } else {
+      el.removeAttribute('title');
+    }
+  });
+  if (tooltipsToggleBtn) {
+    tooltipsToggleBtn.textContent = enabled ? 'Disable Tooltips' : 'Enable Tooltips';
+  }
+}
+
+applyTooltips(tooltipsEnabled());
+
+tooltipsToggleBtn?.addEventListener('click', () => {
+  const next = !tooltipsEnabled();
+  localStorage.setItem(TOOLTIPS_KEY, next ? '1' : '0');
+  applyTooltips(next);
+});
+
 // Stopwatch controls
 document.getElementById('startBtn')?.addEventListener('click', startStopwatch);
 document.getElementById('stopBtn')?.addEventListener('click', stopStopwatch);

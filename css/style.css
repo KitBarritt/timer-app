@@ -136,6 +136,8 @@ body, html {
   font-family: inherit;
   font-size: 0.475em;
   text-align: left;
+  text-decoration: none;
+  box-sizing: border-box;
   cursor: pointer;
 }
 

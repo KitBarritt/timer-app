@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Timer App Help</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #222;
+      max-width: 780px;
+      margin: 0 auto 4em;
+      padding: 0 1.5em;
+      line-height: 1.6;
+    }
+    h1 {
+      font-size: 1.6em;
+      margin-top: 1.4em;
+    }
+    h2 {
+      font-size: 1.25em;
+      margin-top: 2em;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 0.3em;
+    }
+    h3 {
+      font-size: 1.05em;
+      margin-top: 1.4em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1em 0;
+    }
+    th, td {
+      padding: 0.5em;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    code {
+      background: #f0f0f0;
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 1em;
+      padding: 0.6em 1.2em;
+      border-radius: 6px;
+      background: linear-gradient(to bottom, #90caf9, #1976d2);
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .swatch {
+      display: inline-block;
+      width: 0.9em;
+      height: 0.9em;
+      border-radius: 3px;
+      margin-right: 0.4em;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <h1>Timer App Help</h1>
+  <p>A quick reference for running the timer during a meeting. For the full walkthrough, see the printable user guide.</p>
+
+  <h2>The basics</h2>
+  <p>
+    Pick a preset (or select a speaker from the Speaker List, which loads their own preset), then click
+    <strong>Start</strong>. The big colour panel changes automatically as the speaker's time passes:
+  </p>
+  <table>
+    <thead><tr><th>Colour</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><span class="swatch" style="background:grey"></span>Grey</td><td>Not yet at the minimum time</td></tr>
+      <tr><td><span class="swatch" style="background:green"></span>Green</td><td>Within the target time</td></tr>
+      <tr><td><span class="swatch" style="background:orange"></span>Amber</td><td>Getting close to the limit</td></tr>
+      <tr><td><span class="swatch" style="background:red"></span>Red</td><td>Over the limit</td></tr>
+      <tr><td><span class="swatch" style="background:darkred"></span>Flashing red</td><td>Well over &mdash; wrap up now</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Stop</strong> stops the stopwatch (and records the time against the selected speaker, if any). <strong>Reset</strong> stops and zeroes it.</p>
+
+  <h2>Presets</h2>
+  <p>Each preset lights green/amber/red at set points, then flashes shortly after:</p>
+  <table>
+    <thead><tr><th>Preset</th><th>Green</th><th>Amber</th><th>Red</th><th>Flash</th></tr></thead>
+    <tbody>
+      <tr><td>One Minute</td><td>&mdash;</td><td>&mdash;</td><td>1:00</td><td>1:30</td></tr>
+      <tr><td>Table Topics</td><td>1:00</td><td>1:30</td><td>2:00</td><td>2:30</td></tr>
+      <tr><td>Evaluations</td><td>2:00</td><td>2:30</td><td>3:00</td><td>3:30</td></tr>
+      <tr><td>Icebreaker</td><td>4:00</td><td>5:00</td><td>6:00</td><td>6:30</td></tr>
+      <tr><td>Speech</td><td>5:00</td><td>6:00</td><td>7:00</td><td>7:30</td></tr>
+      <tr><td>10 Minutes</td><td>8:00</td><td>9:00</td><td>10:00</td><td>10:30</td></tr>
+      <tr><td>15 Minutes</td><td>12:00</td><td>14:00</td><td>15:00</td><td>15:30</td></tr>
+      <tr><td>20 Minutes</td><td>15:00</td><td>18:00</td><td>20:00</td><td>20:30</td></tr>
+    </tbody>
+  </table>
+  <p><strong>One Minute</strong> is a special case: it stays neutral (grey) until exactly one minute, then jumps straight to solid red &mdash; there's no green/amber phase.</p>
+  <p><strong>Manual</strong> clears any preset so the stopwatch just runs with no automatic colour changes &mdash; use the Green/Amber/Red/Clear buttons yourself instead.</p>
+
+  <h2>Speaker List</h2>
+  <p>
+    Click <strong>Speaker List</strong> to open the editable list. Each row has a name, an optional preset
+    (which fills in the four times for you), and the four times themselves in mm:ss &mdash; edit them directly if
+    a speaker needs a custom timing. <strong>Save &amp; Return to Timer</strong> saves the list and takes you
+    back. The list and each speaker's actual time are stored in your browser, not on a server.
+  </p>
+  <p>
+    <strong>Add Table Topic</strong> (top row of the timer page) is a shortcut for impromptu speakers: it asks
+    for a name, adds them to the list with the Table Topics preset already applied, and selects them ready to go.
+  </p>
+
+  <h2>Mini Player</h2>
+  <p>
+    The Configuration menu's <strong>Mini Player</strong> switches the control page to a compact layout &mdash;
+    useful if you want to keep it open in a small window alongside everything else. <strong>Full View</strong>
+    switches back. Your choice is remembered, including across a trip to the Speaker List and back.
+  </p>
+
+  <h2>The Configuration menu</h2>
+  <p>Hover the &#9776; icon at the top right of the banner to open it:</p>
+  <table>
+    <thead><tr><th>Item</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td>Open Display</td><td>Pops out the plain colour display window, meant to be captured in OBS.</td></tr>
+      <tr><td>Copy Display Link</td><td>Copies the display window's URL, for pasting into an OBS Browser Source instead.</td></tr>
+      <tr><td>Mini Player / Full View</td><td>Switches the control page's own layout.</td></tr>
+      <tr><td>Hide/Show Stopwatch</td><td>Hides or shows the running mm:ss readout.</td></tr>
+      <tr><td>Disable/Enable Tooltips</td><td>Turns the hover tooltips on this page on or off.</td></tr>
+      <tr><td>Help</td><td>This page.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Using it with OBS</h2>
+  <h3>Option A: a second window (recommended)</h3>
+  <p>
+    Click <strong>Open Display</strong> to pop out the colour panel in its own window, then add it to your
+    OBS scene as a <strong>Window Capture</strong> source. Control everything from the original tab &mdash;
+    the two stay in sync instantly as long as they're in the same browser.
+  </p>
+  <h3>Option B: an OBS Browser Source</h3>
+  <p>
+    Use <strong>Copy Display Link</strong> and paste that URL into an OBS <strong>Browser Source</strong>
+    instead. This works even though OBS's browser is a separate process from your own &mdash; syncing falls
+    back to polling the server every third of a second or so, so there's a brief (well under a second) delay
+    compared to Option A.
+  </p>
+  <p>
+    Each control page gets its own random <strong>room</strong> (visible as <code>?room=...</code> in the
+    address bar), so several people can run the timer at the same time from the same site without
+    interfering with each other &mdash; just make sure the display link you use matches the control page
+    you're running.
+  </p>
+
+  <a class="back-link" href="timer.html">&larr; Back to the Timer</a>
+</body>
+</html>

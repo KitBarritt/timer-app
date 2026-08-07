@@ -12,7 +12,7 @@
   <header id="appBanner">
     Timer App by Kit
     <div id="configMenu">
-      <button type="button" id="configMenuBtn" aria-label="Configuration menu" aria-haspopup="true">
+      <button type="button" id="configMenuBtn" aria-label="Configuration menu" aria-haspopup="true" data-tooltip="Configuration menu">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
@@ -23,26 +23,28 @@
         <button type="button" id="miniPlayerBtn" class="menu-item">Mini Player</button>
         <button type="button" id="fullViewBtn" class="menu-item">Full View</button>
         <button type="button" id="hideStopwatchToggle" class="menu-item">Hide Stopwatch</button>
+        <button type="button" id="tooltipsToggle" class="menu-item">Disable Tooltips</button>
+        <a href="help.html" class="menu-item">Help</a>
       </div>
     </div>
   </header>
   <div id="main">
     <div id="left-panel">
-      <a href="speakers.html" class="button button-default">Speaker List</a>
+      <a href="speakers.html" class="button button-default" data-tooltip="View and edit the speaker list">Speaker List</a>
 
-      <select id="speakerDropdown">
+      <select id="speakerDropdown" data-tooltip="Select a speaker to load their preset timing">
         <option value="">Select Speaker</option>
       </select>
-      <button type="button" id="addTableTopicBtn" class="button button-default">Add Table Topic</button>
-      <button type="button" class="preset button button-default" data-times="60,60,60,90">One Minute</button>
-      <button type="button" class="preset button button-default" data-times="60,90,120,150">Table Topics</button>
-      <button type="button" class="preset button button-default" data-times="120,150,180,210">Evaluations</button>
-      <button type="button" class="preset button button-default" data-times="240,300,360,390">Icebreaker</button>
-      <button type="button" class="preset button button-default" data-times="300,360,420,450">Speech</button>
-      <button type="button" class="preset button button-default" data-times="480,540,600,630">10 Minutes</button>
-      <button type="button" class="preset button button-default" data-times="720,840,900,930">15 Minutes</button>
-      <button type="button" class="preset button button-default" data-times="900,1080,1200,1230">20 Minutes</button>
-      <button type="button" id="manualBtn" class="button button-default">Manual</button>
+      <button type="button" id="addTableTopicBtn" class="button button-default" data-tooltip="Add a new impromptu speaker with the Table Topics preset">Add Table Topic</button>
+      <button type="button" class="preset button button-default" data-times="60,60,60,90" data-tooltip="Red 1:00 &middot; Flash 1:30">One Minute</button>
+      <button type="button" class="preset button button-default" data-times="60,90,120,150" data-tooltip="Green 1:00 &middot; Amber 1:30 &middot; Red 2:00 &middot; Flash 2:30">Table Topics</button>
+      <button type="button" class="preset button button-default" data-times="120,150,180,210" data-tooltip="Green 2:00 &middot; Amber 2:30 &middot; Red 3:00 &middot; Flash 3:30">Evaluations</button>
+      <button type="button" class="preset button button-default" data-times="240,300,360,390" data-tooltip="Green 4:00 &middot; Amber 5:00 &middot; Red 6:00 &middot; Flash 6:30">Icebreaker</button>
+      <button type="button" class="preset button button-default" data-times="300,360,420,450" data-tooltip="Green 5:00 &middot; Amber 6:00 &middot; Red 7:00 &middot; Flash 7:30">Speech</button>
+      <button type="button" class="preset button button-default" data-times="480,540,600,630" data-tooltip="Green 8:00 &middot; Amber 9:00 &middot; Red 10:00 &middot; Flash 10:30">10 Minutes</button>
+      <button type="button" class="preset button button-default" data-times="720,840,900,930" data-tooltip="Green 12:00 &middot; Amber 14:00 &middot; Red 15:00 &middot; Flash 15:30">15 Minutes</button>
+      <button type="button" class="preset button button-default" data-times="900,1080,1200,1230" data-tooltip="Green 15:00 &middot; Amber 18:00 &middot; Red 20:00 &middot; Flash 20:30">20 Minutes</button>
+      <button type="button" id="manualBtn" class="button button-default" data-tooltip="Run the stopwatch with no automatic colour changes">Manual</button>
     </div>
     <div id="display">
       <span id="colorLabel"></span>
@@ -57,13 +59,13 @@
         <div class="time-label" id="time-red">--:--</div>
         <div></div>
 
-        <button type="button" id="startBtn" class="button button-default">Start</button>
-        <button type="button" id="stopBtn" class="button button-default">Stop</button>
-        <button type="button" id="resetBtn" class="button button-default">Reset</button>
-        <button type="button" id="greenBtn" class="button button-green">Green</button>
-        <button type="button" id="amberBtn" class="button button-amber">Amber</button>
-        <button type="button" id="redBtn" class="button button-red">Red</button>
-        <button type="button" id="clearBtn" class="button button-default">Clear</button>
+        <button type="button" id="startBtn" class="button button-default" data-tooltip="Start the stopwatch">Start</button>
+        <button type="button" id="stopBtn" class="button button-default" data-tooltip="Stop the stopwatch and record the time if a speaker is selected">Stop</button>
+        <button type="button" id="resetBtn" class="button button-default" data-tooltip="Stop and reset the stopwatch to zero">Reset</button>
+        <button type="button" id="greenBtn" class="button button-green" data-tooltip="Manually set the display to green">Green</button>
+        <button type="button" id="amberBtn" class="button button-amber" data-tooltip="Manually set the display to amber">Amber</button>
+        <button type="button" id="redBtn" class="button button-red" data-tooltip="Manually set the display to red">Red</button>
+        <button type="button" id="clearBtn" class="button button-default" data-tooltip="Manually clear the display back to grey">Clear</button>
       </div>
     </div>
   </div>
