@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Speech Timer</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" type="image/png" href="/favicon.png">
   <script src="js/colors.js"></script>
   <script src="js/room.js"></script>
+  <script defer src="js/cube.js"></script>
   <script defer src="js/main.js"></script>
 </head>
 <body>
@@ -24,6 +26,9 @@
         <button type="button" id="fullViewBtn" class="menu-item">Full View</button>
         <button type="button" id="hideStopwatchToggle" class="menu-item">Hide Stopwatch</button>
         <button type="button" id="tooltipsToggle" class="menu-item">Disable Tooltips</button>
+        <button type="button" id="cubeBleBtn" class="menu-item" hidden data-tooltip="Also show the light on a physical TimerCube over Bluetooth">Connect Cube (Bluetooth)</button>
+        <button type="button" id="cubeUsbBtn" class="menu-item" hidden data-tooltip="Also show the light on a physical TimerCube over USB">Connect Cube (USB)</button>
+        <button type="button" id="cubeDisconnectBtn" class="menu-item" hidden data-tooltip="Stop driving the physical cube">Disconnect Cube</button>
         <a href="help.html" class="menu-item">Help</a>
       </div>
     </div>
