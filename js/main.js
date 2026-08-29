@@ -317,7 +317,7 @@ if (window.Cube) {
 
     if (isConnecting) {
       const btn = detail === 'usb' ? cubeUsbBtn : cubeBleBtn;
-      if (btn) { btn.removeAttribute('hidden'); btn.textContent = 'Connecting cube…'; }
+      if (btn) { btn.removeAttribute('hidden'); btn.textContent = 'Connecting cube...'; }
     } else {
       if (cubeBleBtn) cubeBleBtn.textContent = 'Connect Cube (Bluetooth)';
       if (cubeUsbBtn) cubeUsbBtn.textContent = 'Connect Cube (USB)';
