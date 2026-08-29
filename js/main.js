@@ -56,6 +56,8 @@ function updateDisplayColor(colorKey) {
     label.textContent = color.label;
   }
 
+  if (colorKey !== currentColorKey && window.Cube) Cube.setColour(colorKey);
+
   currentColorKey = colorKey;
   broadcastState();
 }
@@ -72,6 +74,7 @@ function startStopwatch() {
       updateTime();
       updateColorFromTime();
     }, 500);
+    if (window.Cube) Cube.start();
     broadcastState();
   }
 }
@@ -81,6 +84,8 @@ function stopStopwatch() {
     clearInterval(stopwatchInterval);
     stopwatchInterval = null;
   }
+
+  if (window.Cube) Cube.stop();
 
   const seconds = Math.floor(elapsed / 1000);
   updateTime();
@@ -99,6 +104,7 @@ function stopStopwatch() {
 
 function resetStopwatch() {
   stopStopwatch();
+  if (window.Cube) Cube.reset();
   elapsed = 0;
   updateTime();
   updateDisplayColor('grey');
@@ -284,3 +290,48 @@ document.getElementById('greenBtn')?.addEventListener('click', () => setColor('g
 document.getElementById('amberBtn')?.addEventListener('click', () => setColor('amber'));
 document.getElementById('redBtn')?.addEventListener('click', () => setColor('red'));
 document.getElementById('clearBtn')?.addEventListener('click', () => setColor('grey'));
+
+// --- Physical cube bridge (optional; Chromium desktop only) ---
+// The menu items stay hidden on browsers without Web Bluetooth / Web Serial,
+// and the whole feature no-ops if cube.js failed to load.
+if (window.Cube) {
+  const cubeBleBtn = document.getElementById('cubeBleBtn');
+  const cubeUsbBtn = document.getElementById('cubeUsbBtn');
+  const cubeDisconnectBtn = document.getElementById('cubeDisconnectBtn');
+  const cubeSupport = Cube.supported();
+
+  if (cubeSupport.ble) cubeBleBtn?.removeAttribute('hidden');
+  if (cubeSupport.usb) cubeUsbBtn?.removeAttribute('hidden');
+
+  cubeBleBtn?.addEventListener('click', () => Cube.connect('ble').catch(() => {}));
+  cubeUsbBtn?.addEventListener('click', () => Cube.connect('usb').catch(() => {}));
+  cubeDisconnectBtn?.addEventListener('click', () => Cube.disconnect());
+
+  Cube.onStatus((state, detail) => {
+    const isConnected = state === 'connected';
+    const isConnecting = state === 'connecting';
+
+    cubeBleBtn?.toggleAttribute('hidden', isConnected || isConnecting || !cubeSupport.ble);
+    cubeUsbBtn?.toggleAttribute('hidden', isConnected || isConnecting || !cubeSupport.usb);
+    cubeDisconnectBtn?.toggleAttribute('hidden', !isConnected);
+
+    if (isConnecting) {
+      const btn = detail === 'usb' ? cubeUsbBtn : cubeBleBtn;
+      if (btn) { btn.removeAttribute('hidden'); btn.textContent = 'Connecting cube…'; }
+    } else {
+      if (cubeBleBtn) cubeBleBtn.textContent = 'Connect Cube (Bluetooth)';
+      if (cubeUsbBtn) cubeUsbBtn.textContent = 'Connect Cube (USB)';
+    }
+
+    if (isConnected) {
+      // Bring a freshly connected cube in line with what's on screen.
+      if (stopwatchInterval) Cube.start();
+      Cube.setColour(currentColorKey);
+    }
+
+    if (state === 'error') {
+      console.warn('Cube connection error:', detail);
+      window.alert('Could not connect to the cube: ' + detail);
+    }
+  });
+}
