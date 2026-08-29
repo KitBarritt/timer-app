@@ -20,7 +20,10 @@ if (window.innerWidth <= MOBILE_BREAKPOINT) {
   const continueBtn = document.getElementById('continueBtn');
   const message = document.getElementById('splashMessage');
 
-  if (continueBtn) continueBtn.href = 'mobile.html';
+  if (continueBtn) {
+    continueBtn.href = 'mobile.html';
+    continueBtn.textContent = 'Continue';
+  }
 
   if (message) {
     message.innerHTML = `
