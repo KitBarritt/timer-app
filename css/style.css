@@ -359,14 +359,21 @@ input, select {
   margin-top: 1em;
 }
 
-/* OBS Display window */
+/* Display window — captured in OBS, or opened on a phone via the QR code.
+   Sizes use min(fixed, vmin) so a 1920x1080 OBS source looks exactly as
+   before while a phone scales everything down to fit. */
 .display-body {
   overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
 }
 
 #displayScreen {
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   background-color: grey;
   transition: background-color 1s ease;
   position: relative;
@@ -377,42 +384,61 @@ input, select {
   color: white;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 #displayColorLabel {
-  font-size: 5.6em;
+  font-size: min(5.6em, 22vmin);
   font-weight: bold;
   display: none;
 }
 
 #displayBottomLabel {
   position: absolute;
-  bottom: 56px;
+  bottom: max(56px, env(safe-area-inset-bottom, 0px) + 24px);
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 4em;
+  font-size: min(4em, 9vmin);
   letter-spacing: 0.15em;
   opacity: 0.85;
 }
 
+#displayStatus {
+  position: absolute;
+  bottom: max(20px, env(safe-area-inset-bottom, 0px) + 6px);
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: min(1.1em, 3.4vmin);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
 #runningIndicator {
   position: absolute;
-  top: 40px;
-  right: 40px;
-  width: 88px;
-  height: 88px;
+  top: max(40px, env(safe-area-inset-top, 0px) + 16px);
+  right: min(40px, 6vmin);
+  width: min(88px, 14vmin);
+  height: min(88px, 14vmin);
   border-radius: 50%;
-  border: 8px solid white;
+  border: min(8px, 1.4vmin) solid white;
   box-sizing: border-box;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#runningIndicator.running {
+  opacity: 1;
 }
 
 #runningHand {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 8px;
-  height: 32px;
+  width: min(8px, 1.4vmin);
+  height: min(32px, 5vmin);
   background: white;
   transform-origin: bottom center;
   transform: translate(-50%, -100%) rotate(0deg);

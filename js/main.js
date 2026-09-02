@@ -2,6 +2,12 @@ let stopwatchInterval, startTime, elapsed = 0;
 let timingThresholds = [];
 let currentColorKey = 'grey';
 
+// True when the colour on screen was set by the Green/Amber/Red/Clear
+// buttons rather than derived from the running clock. A display mirroring
+// this room needs to know, so it shows the override verbatim instead of
+// computing its own colour from the schedule.
+let manualOverride = false;
+
 const TABLE_TOPICS_PRESET = [60, 90, 120, 150];
 
 // Mini player mode persists across navigation (e.g. going to the Speaker
@@ -25,7 +31,14 @@ timerChannel.onmessage = (e) => {
 };
 
 function broadcastState() {
-  const payload = { room: roomId, color: currentColorKey, running: !!stopwatchInterval };
+  const payload = {
+    room: roomId,
+    color: currentColorKey,
+    running: !!stopwatchInterval,
+    manual: manualOverride,
+    thresholds: timingThresholds.length === 4 ? timingThresholds : null,
+    baseElapsedMs: elapsed,
+  };
 
   timerChannel.postMessage({ type: 'state', ...payload });
 
@@ -63,16 +76,23 @@ function updateDisplayColor(colorKey) {
 }
 
 function setColor(colorKey) {
+  manualOverride = true;
   updateDisplayColor(colorKey);
 }
 
 function startStopwatch() {
   if (!stopwatchInterval) {
     startTime = Date.now() - elapsed;
+    manualOverride = false;
+    let tick = 0;
     stopwatchInterval = setInterval(() => {
       elapsed = Date.now() - startTime;
       updateTime();
       updateColorFromTime();
+      // Re-anchor any mirroring display roughly every 2s even while the
+      // colour isn't changing, so a late-joining or drifting display
+      // (or one that briefly lost contact) catches back up.
+      if (++tick % 4 === 0) broadcastState();
     }, 500);
     if (window.Cube) Cube.start();
     broadcastState();
@@ -111,25 +131,18 @@ function resetStopwatch() {
 }
 
 function updateTime() {
-  const seconds = Math.floor(elapsed / 1000);
-  const min = String(Math.floor(seconds / 60)).padStart(2, '0');
-  const sec = String(seconds % 60).padStart(2, '0');
   const stopwatch = document.getElementById("stopwatch");
-  if (stopwatch) stopwatch.textContent = `${min}:${sec}`;
+  if (stopwatch) stopwatch.textContent = formatMMSS(elapsed / 1000);
 }
 
 function updateColorFromTime() {
   const seconds = Math.floor(elapsed / 1000);
-  if (timingThresholds.length === 4) {
-    if (seconds >= timingThresholds[3]) {
-      updateDisplayColor("flash");
-    } else if (seconds >= timingThresholds[2]) {
-      updateDisplayColor("red");
-    } else if (seconds >= timingThresholds[1]) {
-      updateDisplayColor("amber");
-    } else if (seconds >= timingThresholds[0]) {
-      updateDisplayColor("green");
-    }
+  const key = colorKeyForElapsed(seconds, timingThresholds);
+  // Only the coloured phase (green onward) is driven automatically; the
+  // grey lead-in leaves any manual colour untouched, as before.
+  if (timingThresholds.length === 4 && key !== 'grey') {
+    manualOverride = false;
+    updateDisplayColor(key);
   }
 }
 
