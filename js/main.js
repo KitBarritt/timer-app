@@ -243,12 +243,54 @@ document.getElementById('openDisplayBtn')?.addEventListener('click', () => {
   window.open(displayUrl.href, 'obsTimerDisplay', 'width=1920,height=1080,resizable=yes');
 });
 
-document.getElementById('copyDisplayLinkBtn')?.addEventListener('click', async () => {
+async function copyDisplayLink() {
   try {
     await navigator.clipboard.writeText(displayUrl.href);
   } catch {
     window.prompt('Copy this link:', displayUrl.href);
   }
+}
+
+document.getElementById('copyDisplayLinkBtn')?.addEventListener('click', copyDisplayLink);
+
+// QR code for opening the display on a phone / tablet on the same network.
+const qrModal = document.getElementById('qrModal');
+
+function openQrModal() {
+  if (!qrModal) return;
+
+  document.getElementById('qrUrl').textContent = displayUrl.href;
+
+  const codeEl = document.getElementById('qrCode');
+  try {
+    codeEl.innerHTML = QR.svg(displayUrl.href, { margin: 2 });
+  } catch {
+    codeEl.textContent = 'This link is too long to fit in a QR code — use Copy link instead.';
+  }
+
+  // A QR pointing at localhost / a loopback address is no use to another
+  // device; warn when that's what the control page is being served from.
+  const host = location.hostname;
+  const unreachable = location.protocol === 'file:' ||
+    /^(localhost|127\.|0\.0\.0\.0$|\[?::1\]?$)/.test(host);
+  document.getElementById('qrHost').textContent = host || location.protocol;
+  document.getElementById('qrWarn').hidden = !unreachable;
+
+  qrModal.hidden = false;
+}
+
+function closeQrModal() {
+  if (qrModal) qrModal.hidden = true;
+}
+
+document.getElementById('showQrBtn')?.addEventListener('click', openQrModal);
+document.getElementById('qrCloseBtn')?.addEventListener('click', closeQrModal);
+document.getElementById('qrCopyBtn')?.addEventListener('click', copyDisplayLink);
+qrModal?.addEventListener('click', (e) => {
+  if (e.target === qrModal) closeQrModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && qrModal && !qrModal.hidden) closeQrModal();
 });
 
 // Mini player: compact layout toggle for the control window itself
