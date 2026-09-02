@@ -73,12 +73,10 @@ function render() {
   }
 
   if (statusEl) {
-    if (!lastSyncLocalMs) {
-      statusEl.textContent = '';
-    } else {
-      const stale = Date.now() - lastSyncLocalMs > 6000;
-      statusEl.textContent = stale ? 'running on its own' : '';
-    }
+    // Only worth saying while a speech is actually being timed — an idle
+    // timer sends nothing, and that's not a problem.
+    var stale = lastSyncLocalMs && model.running && Date.now() - lastSyncLocalMs > 6000;
+    statusEl.textContent = stale ? 'running on its own' : '';
   }
 }
 
