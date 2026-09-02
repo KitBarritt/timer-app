@@ -36,6 +36,33 @@ function parseMMSS(str) {
   return parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
 }
 
+// Turn a bare digit string (from the iOS numeric keypad, which has no colon)
+// into "mm:ss". Right-to-left: the last two digits are seconds, the rest are
+// minutes. "1" -> "01:00", "130" -> "01:30", "0130" -> "01:30", "1234" -> "12:34".
+// Returns '' for empty input, or null if it can't be made sense of (e.g. seconds
+// > 59) so the caller can leave the raw text in place for the user to fix.
+function digitsToMMSS(raw) {
+  const s = (raw || '').trim();
+  if (s === '') return '';
+
+  if (s.includes(':')) {
+    const [m, sec = '0'] = s.split(':');
+    const mm = parseInt(m || '0', 10), ss = parseInt(sec || '0', 10);
+    if (isNaN(mm) || isNaN(ss) || ss > 59) return null;
+    return `${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')}`;
+  }
+
+  const d = s.replace(/\D/g, '');
+  if (d === '') return null;
+
+  let mm, ss;
+  if (d.length <= 2) { mm = parseInt(d, 10); ss = 0; }
+  else { ss = parseInt(d.slice(-2), 10); mm = parseInt(d.slice(0, -2), 10); }
+  if (ss > 59) return null;
+
+  return `${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')}`;
+}
+
 function updateStopwatchVisibility() {
   const showDigits = !running || !hideStopwatchCheckbox.checked;
   stopwatchEl.style.display = showDigits ? 'block' : 'none';
@@ -134,8 +161,17 @@ function applyCustomTimes() {
   timingThresholds = [green, amber, red, red + 30];
 }
 
+// Normalise the field to mm:ss (so users can type "0130" on the colon-less
+// iOS keypad), then apply. Fires on commit — tapping the next field or the
+// keyboard's Done button both trigger it.
+function normalizeAndApply(input) {
+  const formatted = digitsToMMSS(input.value);
+  if (formatted !== null) input.value = formatted;
+  applyCustomTimes();
+}
+
 [customGreen, customAmber, customRed].forEach(input => {
-  input.addEventListener('change', applyCustomTimes);
+  input.addEventListener('change', () => normalizeAndApply(input));
 });
 
 // --- Stopwatch visibility preference ---
