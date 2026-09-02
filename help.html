@@ -132,6 +132,7 @@
     <tbody>
       <tr><td>Open Display</td><td>Pops out the plain colour display window, meant to be captured in OBS.</td></tr>
       <tr><td>Copy Display Link</td><td>Copies the display window's URL, for pasting into an OBS Browser Source instead.</td></tr>
+      <tr><td>Phone / Tablet Display</td><td>Shows a QR code to open that same display on another device &mdash; see below.</td></tr>
       <tr><td>Mini Player / Full View</td><td>Switches the control page's own layout.</td></tr>
       <tr><td>Hide/Show Stopwatch</td><td>Hides or shows the running mm:ss readout.</td></tr>
       <tr><td>Disable/Enable Tooltips</td><td>Turns the hover tooltips on this page on or off.</td></tr>
@@ -159,6 +160,34 @@
     interfering with each other &mdash; just make sure the display link you use matches the control page
     you're running.
   </p>
+
+  <h2>Using a phone or tablet as a display</h2>
+  <p>
+    <strong>Phone / Tablet Display</strong> in the Configuration menu shows a
+    QR code. Scan it with the other device's camera and it opens a full-screen
+    colour panel that mirrors this timer &mdash; useful as a timekeeper's
+    repeater, or propped up facing the speaker.
+  </p>
+  <p>
+    Once you press <strong>Start</strong>, the device is handed the whole
+    schedule, not just the current colour. From then on it counts the speech
+    on its own: if it briefly drops off the network it keeps showing the right
+    colour and the little clock keeps turning, and it re-syncs automatically
+    when the connection comes back. Stop and Reset still come from this page.
+  </p>
+  <p>
+    Two things to know:
+  </p>
+  <ul>
+    <li>Both devices must be able to reach the same address. In practice that
+      means the same Wi&#8209;Fi, with the timer opened from the computer's
+      network address (something like <code>http://192.168.1.20:PORT/</code>)
+      rather than <code>localhost</code>. The QR dialog warns you if the
+      address won't work from another device.</li>
+    <li>The display asks the device to keep its screen awake, but a phone can
+      overrule that &mdash; turn off auto&#8209;lock, or set a long screen
+      timeout, for a long session. Tapping the panel puts it into fullscreen.</li>
+  </ul>
 
   <a class="back-link" href="timer.html">&larr; Back to the Timer</a>
 </body>
