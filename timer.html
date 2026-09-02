@@ -7,6 +7,8 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <script src="js/colors.js"></script>
   <script src="js/room.js"></script>
+  <script src="js/timing.js"></script>
+  <script src="js/qr.js"></script>
   <script defer src="js/cube.js"></script>
   <script defer src="js/main.js"></script>
 </head>
@@ -22,6 +24,7 @@
       <div id="configMenuPanel">
         <button type="button" id="openDisplayBtn" class="menu-item">Open Display</button>
         <button type="button" id="copyDisplayLinkBtn" class="menu-item">Copy Display Link</button>
+        <button type="button" id="showQrBtn" class="menu-item" data-tooltip="Show a QR code to open the display on a phone or tablet">Phone / Tablet Display</button>
         <button type="button" id="miniPlayerBtn" class="menu-item">Mini Player</button>
         <button type="button" id="fullViewBtn" class="menu-item">Full View</button>
         <button type="button" id="hideStopwatchToggle" class="menu-item">Hide Stopwatch</button>
@@ -72,6 +75,27 @@
         <button type="button" id="redBtn" class="button button-red" data-tooltip="Manually set the display to red">Red</button>
         <button type="button" id="clearBtn" class="button button-default" data-tooltip="Manually clear the display back to grey">Clear</button>
       </div>
+    </div>
+  </div>
+
+  <div id="qrModal" hidden>
+    <div id="qrCard">
+      <button type="button" id="qrCloseBtn" aria-label="Close">&times;</button>
+      <h2>Phone / tablet display</h2>
+      <p>Scan with the other device's camera. It opens a full-screen colour
+        display that follows this timer &mdash; and keeps its own time if the
+        connection drops mid-speech.</p>
+      <div id="qrCode"></div>
+      <p id="qrUrl"></p>
+      <p id="qrWarn" hidden>
+        This page is being served from <code id="qrHost">localhost</code>, which
+        only <em>this</em> computer can reach. Open the timer from the machine's
+        network address (e.g. <code>http://192.168.1.x:PORT/</code>) so another
+        device can connect.
+      </p>
+      <p id="qrNote">Turn the device's auto-lock off, or set a long screen
+        timeout &mdash; the display asks to stay awake but a phone can overrule it.</p>
+      <button type="button" id="qrCopyBtn" class="button button-default">Copy link</button>
     </div>
   </div>
 </body>

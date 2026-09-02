@@ -2,6 +2,12 @@ let stopwatchInterval, startTime, elapsed = 0;
 let timingThresholds = [];
 let currentColorKey = 'grey';
 
+// True when the colour on screen was set by the Green/Amber/Red/Clear
+// buttons rather than derived from the running clock. A display mirroring
+// this room needs to know, so it shows the override verbatim instead of
+// computing its own colour from the schedule.
+let manualOverride = false;
+
 const TABLE_TOPICS_PRESET = [60, 90, 120, 150];
 
 // Mini player mode persists across navigation (e.g. going to the Speaker
@@ -25,7 +31,14 @@ timerChannel.onmessage = (e) => {
 };
 
 function broadcastState() {
-  const payload = { room: roomId, color: currentColorKey, running: !!stopwatchInterval };
+  const payload = {
+    room: roomId,
+    color: currentColorKey,
+    running: !!stopwatchInterval,
+    manual: manualOverride,
+    thresholds: timingThresholds.length === 4 ? timingThresholds : null,
+    baseElapsedMs: elapsed,
+  };
 
   timerChannel.postMessage({ type: 'state', ...payload });
 
@@ -63,16 +76,23 @@ function updateDisplayColor(colorKey) {
 }
 
 function setColor(colorKey) {
+  manualOverride = true;
   updateDisplayColor(colorKey);
 }
 
 function startStopwatch() {
   if (!stopwatchInterval) {
     startTime = Date.now() - elapsed;
+    manualOverride = false;
+    let tick = 0;
     stopwatchInterval = setInterval(() => {
       elapsed = Date.now() - startTime;
       updateTime();
       updateColorFromTime();
+      // Re-anchor any mirroring display roughly every 2s even while the
+      // colour isn't changing, so a late-joining or drifting display
+      // (or one that briefly lost contact) catches back up.
+      if (++tick % 4 === 0) broadcastState();
     }, 500);
     if (window.Cube) Cube.start();
     broadcastState();
@@ -111,25 +131,18 @@ function resetStopwatch() {
 }
 
 function updateTime() {
-  const seconds = Math.floor(elapsed / 1000);
-  const min = String(Math.floor(seconds / 60)).padStart(2, '0');
-  const sec = String(seconds % 60).padStart(2, '0');
   const stopwatch = document.getElementById("stopwatch");
-  if (stopwatch) stopwatch.textContent = `${min}:${sec}`;
+  if (stopwatch) stopwatch.textContent = formatMMSS(elapsed / 1000);
 }
 
 function updateColorFromTime() {
   const seconds = Math.floor(elapsed / 1000);
-  if (timingThresholds.length === 4) {
-    if (seconds >= timingThresholds[3]) {
-      updateDisplayColor("flash");
-    } else if (seconds >= timingThresholds[2]) {
-      updateDisplayColor("red");
-    } else if (seconds >= timingThresholds[1]) {
-      updateDisplayColor("amber");
-    } else if (seconds >= timingThresholds[0]) {
-      updateDisplayColor("green");
-    }
+  const key = colorKeyForElapsed(seconds, timingThresholds);
+  // Only the coloured phase (green onward) is driven automatically; the
+  // grey lead-in leaves any manual colour untouched, as before.
+  if (timingThresholds.length === 4 && key !== 'grey') {
+    manualOverride = false;
+    updateDisplayColor(key);
   }
 }
 
@@ -230,12 +243,54 @@ document.getElementById('openDisplayBtn')?.addEventListener('click', () => {
   window.open(displayUrl.href, 'obsTimerDisplay', 'width=1920,height=1080,resizable=yes');
 });
 
-document.getElementById('copyDisplayLinkBtn')?.addEventListener('click', async () => {
+async function copyDisplayLink() {
   try {
     await navigator.clipboard.writeText(displayUrl.href);
   } catch {
     window.prompt('Copy this link:', displayUrl.href);
   }
+}
+
+document.getElementById('copyDisplayLinkBtn')?.addEventListener('click', copyDisplayLink);
+
+// QR code for opening the display on a phone / tablet on the same network.
+const qrModal = document.getElementById('qrModal');
+
+function openQrModal() {
+  if (!qrModal) return;
+
+  document.getElementById('qrUrl').textContent = displayUrl.href;
+
+  const codeEl = document.getElementById('qrCode');
+  try {
+    codeEl.innerHTML = QR.svg(displayUrl.href, { margin: 2 });
+  } catch {
+    codeEl.textContent = 'This link is too long to fit in a QR code — use Copy link instead.';
+  }
+
+  // A QR pointing at localhost / a loopback address is no use to another
+  // device; warn when that's what the control page is being served from.
+  const host = location.hostname;
+  const unreachable = location.protocol === 'file:' ||
+    /^(localhost|127\.|0\.0\.0\.0$|\[?::1\]?$)/.test(host);
+  document.getElementById('qrHost').textContent = host || location.protocol;
+  document.getElementById('qrWarn').hidden = !unreachable;
+
+  qrModal.hidden = false;
+}
+
+function closeQrModal() {
+  if (qrModal) qrModal.hidden = true;
+}
+
+document.getElementById('showQrBtn')?.addEventListener('click', openQrModal);
+document.getElementById('qrCloseBtn')?.addEventListener('click', closeQrModal);
+document.getElementById('qrCopyBtn')?.addEventListener('click', copyDisplayLink);
+qrModal?.addEventListener('click', (e) => {
+  if (e.target === qrModal) closeQrModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && qrModal && !qrModal.hidden) closeQrModal();
 });
 
 // Mini player: compact layout toggle for the control window itself

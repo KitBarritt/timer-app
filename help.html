@@ -132,6 +132,9 @@
     <tbody>
       <tr><td>Open Display</td><td>Pops out the plain colour display window, meant to be captured in OBS.</td></tr>
       <tr><td>Copy Display Link</td><td>Copies the display window's URL, for pasting into an OBS Browser Source instead.</td></tr>
+      <tr><td>Phone / Tablet Display</td><td>Shows a QR code to open that same display on another device &mdash; see below.</td></tr>
+      <tr><td>Connect Cube (Bluetooth) / (USB)</td><td>Also drives a physical TimerCube's light &mdash; see below. Only shown in Chrome or Edge on the desktop.</td></tr>
+      <tr><td>Disconnect Cube</td><td>Stops driving the cube. Only shown while one is connected.</td></tr>
       <tr><td>Mini Player / Full View</td><td>Switches the control page's own layout.</td></tr>
       <tr><td>Hide/Show Stopwatch</td><td>Hides or shows the running mm:ss readout.</td></tr>
       <tr><td>Disable/Enable Tooltips</td><td>Turns the hover tooltips on this page on or off.</td></tr>
@@ -140,24 +143,71 @@
   </table>
 
   <h2>Using it with OBS</h2>
-  <h3>Option A: a second window (recommended)</h3>
+  <h3>Option A: an OBS Browser Source (recommended)</h3>
+  <p>
+    Use <strong>Copy Display Link</strong> and paste that URL into an OBS <strong>Browser Source</strong>.
+    This works even though OBS's browser is a separate process from your own &mdash; the display and the
+    control page keep in step by polling the server about once a second, and the display also runs the
+    timer itself, so a brief network hiccup never freezes the colour.
+  </p>
+  <h3>Option B: a second window</h3>
   <p>
     Click <strong>Open Display</strong> to pop out the colour panel in its own window, then add it to your
     OBS scene as a <strong>Window Capture</strong> source. Control everything from the original tab &mdash;
-    the two stay in sync instantly as long as they're in the same browser.
-  </p>
-  <h3>Option B: an OBS Browser Source</h3>
-  <p>
-    Use <strong>Copy Display Link</strong> and paste that URL into an OBS <strong>Browser Source</strong>
-    instead. This works even though OBS's browser is a separate process from your own &mdash; syncing falls
-    back to polling the server every third of a second or so, so there's a brief (well under a second) delay
-    compared to Option A.
+    the two stay in sync instantly as long as they're in the same browser, but the window has to stay open
+    and un-minimised for OBS to capture it.
   </p>
   <p>
     Each control page gets its own random <strong>room</strong> (visible as <code>?room=...</code> in the
     address bar), so several people can run the timer at the same time from the same site without
     interfering with each other &mdash; just make sure the display link you use matches the control page
     you're running.
+  </p>
+
+  <h2>Using a phone or tablet as a display</h2>
+  <p>
+    <strong>Phone / Tablet Display</strong> in the Configuration menu shows a
+    QR code. Scan it with the other device's camera and it opens a full-screen
+    colour panel that mirrors this timer &mdash; useful as a timekeeper's
+    repeater, or propped up facing the speaker.
+  </p>
+  <p>
+    Once you press <strong>Start</strong>, the device is handed the whole
+    schedule, not just the current colour. From then on it counts the speech
+    on its own: if it briefly drops off the network it keeps showing the right
+    colour and the little clock keeps turning, and it re-syncs automatically
+    when the connection comes back. Stop and Reset still come from this page.
+  </p>
+  <p>
+    Two things to know:
+  </p>
+  <ul>
+    <li>Both devices must be able to reach the same address. In practice that
+      means the same Wi&#8209;Fi, with the timer opened from the computer's
+      network address (something like <code>http://192.168.1.20:PORT/</code>)
+      rather than <code>localhost</code>. The QR dialog warns you if the
+      address won't work from another device.</li>
+    <li>The display asks the device to keep its screen awake, but a phone can
+      overrule that &mdash; turn off auto&#8209;lock, or set a long screen
+      timeout, for a long session. Tapping the panel puts it into fullscreen.</li>
+  </ul>
+
+  <h2>Using a physical TimerCube</h2>
+  <p>
+    If you have a physical <strong>TimerCube</strong> (or Toast Timer) device, the Configuration menu can
+    drive its light in step with the on&#8209;screen panel. This needs <strong>Chrome or Edge on a
+    desktop</strong> &mdash; the menu items stay hidden in browsers without Web Bluetooth / Web Serial.
+  </p>
+  <p>
+    Choose <strong>Connect Cube (Bluetooth)</strong> or <strong>Connect Cube (USB)</strong> and pick the
+    device from the browser's prompt. Once connected, the cube follows every colour change and the
+    <strong>Start</strong> / <strong>Stop</strong> / <strong>Reset</strong> buttons; connecting part way
+    through brings it straight to the current colour. <strong>Disconnect Cube</strong> &mdash; or unplugging
+    it, or leaving Bluetooth range &mdash; stops it.
+  </p>
+  <p>
+    The cube is used as a light only: this page stays in charge of the timing, so the cube's own buttons
+    and presets are bypassed while it's connected.
   </p>
 
   <a class="back-link" href="timer.html">&larr; Back to the Timer</a>
