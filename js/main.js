@@ -23,6 +23,93 @@ if (localStorage.getItem(MINI_MODE_KEY) === '1') {
   document.documentElement.classList.add('mini-mode');
 }
 
+// --- Persist the control page's own timer state ----------------------
+// The schedule, the elapsed clock and the running flag live only in
+// memory here, so any full-page navigation (most easily the Speaker List
+// link and back) used to reset the timer mid-speech. Mirror the state
+// into localStorage on every change and restore it on load, folding in
+// the wall-clock time that passed while away — the same re-anchoring the
+// display page does when it briefly loses contact.
+const TIMER_STATE_KEY = 'timerControlState';
+// Older than this, a saved "running" clock is treated as abandoned rather
+// than resumed. The snapshot is refreshed every ~2s while the tab is open
+// and again on pagehide, so a gap this large means it was genuinely shut
+// for that long.
+const TIMER_STATE_MAX_AGE_MS = 15 * 60 * 1000;
+
+// Set while restoreState() is repopulating the page, so the helpers it
+// calls don't write half-restored state back over the snapshot.
+let restoringState = false;
+
+function persistState() {
+  if (restoringState) return;
+  try {
+    localStorage.setItem(TIMER_STATE_KEY, JSON.stringify({
+      savedAt: Date.now(),
+      running: !!stopwatchInterval,
+      elapsedMs: elapsed,
+      thresholds: timingThresholds.length === 4 ? timingThresholds : [],
+      color: currentColorKey,
+      manualOverride: manualOverride,
+      speaker: document.getElementById('speakerDropdown')?.value || '',
+    }));
+  } catch (e) {
+    /* storage full or unavailable — nothing useful to do */
+  }
+}
+
+function restoreState() {
+  let saved;
+  try {
+    saved = JSON.parse(localStorage.getItem(TIMER_STATE_KEY) || 'null');
+  } catch (e) {
+    saved = null;
+  }
+  if (!saved) return;
+
+  const age = Date.now() - (Number(saved.savedAt) || 0);
+  const stale = !(age >= 0 && age <= TIMER_STATE_MAX_AGE_MS);
+
+  restoringState = true;
+
+  // The schedule always comes back — only the abandoned clock is dropped.
+  if (Array.isArray(saved.thresholds) && saved.thresholds.length === 4) {
+    timingThresholds = saved.thresholds.slice();
+    setThresholdLabels(timingThresholds);
+  }
+
+  const dropdown = document.getElementById('speakerDropdown');
+  if (dropdown && saved.speaker) dropdown.value = saved.speaker;
+
+  if (saved.running && !stale) {
+    // Resume: add on the wall-clock time that passed while we were away.
+    elapsed = (Number(saved.elapsedMs) || 0) + age;
+    manualOverride = false;
+    startTime = Date.now() - elapsed;
+    updateTime();
+    beginTicking();
+    if (window.Cube) Cube.start();
+    // Pick the colour up now rather than waiting for the first tick; with
+    // no schedule set, honour the manual colour that was showing.
+    if (timingThresholds.length === 4) {
+      updateColorFromTime();
+    } else if (saved.color && saved.color !== 'grey') {
+      manualOverride = !!saved.manualOverride;
+      updateDisplayColor(saved.color);
+    }
+  } else {
+    elapsed = stale ? 0 : (Number(saved.elapsedMs) || 0);
+    updateTime();
+    if (!stale && saved.color && saved.color !== 'grey') {
+      manualOverride = !!saved.manualOverride;
+      updateDisplayColor(saved.color);
+    }
+  }
+
+  restoringState = false;
+  broadcastState();
+}
+
 const roomId = getOrCreateRoomId();
 
 const timerChannel = new BroadcastChannel('obs-timer-channel-' + roomId);
@@ -53,6 +140,8 @@ function broadcastState() {
   }).then(res => {
     if (!res.ok) res.text().then(t => console.warn('state.php POST failed:', res.status, t));
   }).catch(err => console.warn('state.php unreachable:', err));
+
+  persistState();
 }
 
 function updateDisplayColor(colorKey) {
@@ -80,20 +169,27 @@ function setColor(colorKey) {
   updateDisplayColor(colorKey);
 }
 
+// Start the 500ms tick loop. Assumes startTime is already anchored so
+// that `elapsed = Date.now() - startTime`. Shared by startStopwatch() and
+// restoreState() when it resumes a running timer after a navigation.
+function beginTicking() {
+  let tick = 0;
+  stopwatchInterval = setInterval(() => {
+    elapsed = Date.now() - startTime;
+    updateTime();
+    updateColorFromTime();
+    // Re-anchor any mirroring display roughly every 2s even while the
+    // colour isn't changing, so a late-joining or drifting display
+    // (or one that briefly lost contact) catches back up.
+    if (++tick % 4 === 0) broadcastState();
+  }, 500);
+}
+
 function startStopwatch() {
   if (!stopwatchInterval) {
     startTime = Date.now() - elapsed;
     manualOverride = false;
-    let tick = 0;
-    stopwatchInterval = setInterval(() => {
-      elapsed = Date.now() - startTime;
-      updateTime();
-      updateColorFromTime();
-      // Re-anchor any mirroring display roughly every 2s even while the
-      // colour isn't changing, so a late-joining or drifting display
-      // (or one that briefly lost contact) catches back up.
-      if (++tick % 4 === 0) broadcastState();
-    }, 500);
+    beginTicking();
     if (window.Cube) Cube.start();
     broadcastState();
   }
@@ -156,6 +252,10 @@ function setThresholdLabels(times) {
   document.getElementById("time-green").textContent = formatted[0] || "--:--";
   document.getElementById("time-amber").textContent = formatted[1] || "--:--";
   document.getElementById("time-red").textContent = formatted[2] || "--:--";
+
+  // Remember a bare schedule change (preset / speaker / Manual) too, not
+  // just changes that go through broadcastState().
+  persistState();
 }
 
 // --- Speaker data (from localStorage) ---
@@ -207,6 +307,7 @@ function addOrUpdateSpeaker(name, preset) {
 
 speakerDropdown.addEventListener('change', (e) => {
   applySpeakerPreset(e.target.value);
+  persistState();
 });
 
 // Button presets
@@ -390,3 +491,9 @@ if (window.Cube) {
     }
   });
 }
+
+// --- Survive a full-page navigation (e.g. the Speaker List and back) ---
+// Take a last, fresh snapshot right before we unload, then restore on the
+// way back in. pagehide covers navigation, tab close and bfcache.
+window.addEventListener('pagehide', persistState);
+restoreState();
